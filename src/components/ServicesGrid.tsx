@@ -22,8 +22,9 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
   };
 
   const submit = async () => {
-    await fetch('/api/submit', {
+    await fetch('/api/services/submit', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, services: Array.from(selected) }),
     });
   };
