@@ -1,0 +1,18 @@
+// Define your SQLite datasource
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Generate the Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Service model for listing and CRUD operations
+model Service {
+  id       Int     @id @default(autoincrement())
+  name     String
+  price    Float
+  imageUrl String
+}

@@ -1,0 +1,43 @@
+# Node dependencies
+/node_modules/
+
+# Next.js build outputs
+/.next/
+/out/
+
+# Prisma local database files
+/prisma/dev.db
+/prisma/dev.db-journal
+
+# Environment variables (all .env files)
+/.env*
+!.env.example
+
+# Yarn files
+.yarn/cache/
+.yarn/unplugged/
+/.yarn/build-state.yml
+/.yarn/install-state.gz
+
+# TypeScript incremental files
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code
+.vscode/
+
+# Other IDEs
+.idea/
+
+# macOS temp files
+.DS_Store
+
+# Test coverage
+/coverage/
+
+/src/generated/prisma
+
