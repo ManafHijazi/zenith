@@ -1,64 +1,97 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 type Service = { id: number; name: string; price: number; imageUrl: string };
+
 export default function ServicesGrid({ services }: { services: Service[] }) {
-  const [selected, setSelected] = useState<Set<number>>(new Set());
   const [email, setEmail] = useState('');
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+
   const toggle = (id: number) => {
     const s = new Set(selected);
-    if (s.has(id)) {
-      s.delete(id);
-    } else {
-      s.add(id);
-    }
+
+    if (s.has(id)) s.delete(id);
+    else s.add(id);
+
     setSelected(s);
   };
+
   const submit = async () => {
-    if (!email) return alert('Enter a valid email.');
     await fetch('/api/submit', {
       method: 'POST',
       body: JSON.stringify({ email, services: Array.from(selected) }),
     });
-    alert('Sent!');
   };
 
   return (
-    <div className='p-8'>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+    <div className='w-full !pb-12 max-w-7xl mx-auto !px-6 flex flex-col gap-y-6'>
+      <div className='flex flex-col items-center gap-y-6'>
+        <Image src='/dark-logo.png' alt='Logo' width={300} height={300} />
+        <h1 className='!text-2xl'>Our Services</h1>
+      </div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-6'>
         {services.map((svc) => (
           <div
             key={svc.id}
-            className={
-              `border p-4 rounded cursor-pointer ` +
-              (selected.has(svc.id) ? 'ring-4 ring-blue-500' : '')
-            }
-            onClick={() => toggle(svc.id)}>
-            {svc.imageUrl && (
-              <Image
-                src={svc.imageUrl}
-                alt={svc.name}
-                width={320}
-                height={128}
-                className='w-full h-32 object-cover rounded'
-              />
-            )}
+            onClick={() => toggle(svc.id)}
+            className={`group relative bg-white shadow-md rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
+              selected.has(svc.id) ? 'ring-4 ring-light-red' : ''
+            }`}>
+            <div className='relative w-full h-80 mb-2 overflow-hidden rounded-md'>
+              {!loadedImages.has(svc.id) && (
+                <div className='absolute inset-0 bg-gray-200 animate-pulse' />
+              )}
 
-            <h3 className='mt-2 font-bold'>{svc.name}</h3>
-            <p>${svc.price.toFixed(2)}</p>
+              {svc.imageUrl && (
+                <Image
+                  width={300}
+                  height={200}
+                  alt={svc.name}
+                  src={svc.imageUrl}
+                  className='w-full h-full object-cover transition-opacity'
+                  onLoadingComplete={() => {
+                    setLoadedImages((prev) => {
+                      const next = new Set(prev);
+
+                      next.add(svc.id);
+
+                      return next;
+                    });
+                  }}
+                />
+              )}
+            </div>
+
+            <div className='!px-6 !py-3'>
+              <h1 className='!text-xl !font-semibold text-foreground group-hover:text-light-red transition-colors'>
+                {svc.name}
+              </h1>
+              <p className='mt-1 text-foreground text-lg font-medium'>${svc.price.toFixed(2)}</p>
+            </div>
           </div>
         ))}
       </div>
-      <div className='mt-6 flex space-x-2'>
+
+      <div className='!mt-8 flex !space-x-4'>
         <input
           type='email'
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
           placeholder='Your email'
-          className='border p-2 flex-1 rounded'
+          className='!bg-white border w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+          onChange={(event) => {
+            const { value } = event?.target;
+
+            setEmail(value);
+          }}
         />
-        <button onClick={submit} className='px-4 py-2 bg-blue-600 text-white rounded'>
+
+        <button
+          disabled={!email}
+          onClick={submit}
+          className='w-42 disabled:cursor-not-allowed !disabled:bg-gray-200 !py-3 disabled:translate-y-0 !bg-light-red !hover:bg-red-600 !text-white cursor-pointer !text-lg !rounded-lg shadow transition transform hover:-translate-y-0.5'>
           Submit
         </button>
       </div>
