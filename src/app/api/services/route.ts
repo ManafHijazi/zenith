@@ -12,7 +12,6 @@ export async function POST(req: Request) {
   const formData = await req.formData();
   const name = formData.get('name') as string;
   const priceStr = formData.get('price') as string;
-  const description = formData.get('description') as string;
   const file = formData.get('image') as File | null;
 
   // Handle file upload
@@ -40,7 +39,6 @@ export async function POST(req: Request) {
     .insert([
       {
         name,
-        description,
         price: parseFloat(priceStr),
         imageUrl,
       },

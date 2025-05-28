@@ -34,7 +34,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
   };
 
   return (
-    <div className='w-full !pb-12 max-w-7xl mx-auto !px-6 flex flex-col gap-y-6'>
+    <div className='w-full !pb-12 max-w-7xl mx-auto !px-6 flex flex-col'>
       <div className='flex flex-col items-center gap-y-6'>
         <Link href='/' className='inline-block !cursor-pointer'>
           <Image src='/dark-logo.png' alt='Logo' width={300} height={300} />
@@ -45,16 +45,17 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
         </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-6'>
+      <div className='grid overflow-y-auto max-h-[calc(100vh-20rem)] !p-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-6'>
         {services && services.length > 0 ? (
           services.map((svc) => (
             <div
               key={svc.id}
               onClick={() => toggle(svc.id)}
-              className={`group relative max-h-[35rem] min-h-[35rem] bg-white rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
+              className={`group relative max-h-[30rem] min-h-[30rem] bg-white rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
                 selected.has(svc.id) ? 'ring-4 ring-light-red' : ''
               }`}>
-              <div className='relative w-full h-80 mb-2 overflow-hidden'>
+              <h1 className='!text-2xl text-center !mt-12 !mb-9 text-foreground'>{svc.name}</h1>
+              <div className='relative w-full h-80 overflow-hidden'>
                 {!loadedImages.has(svc.id) && (
                   <div className='absolute inset-0 bg-gray-200 animate-pulse' />
                 )}
@@ -62,7 +63,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
                 {svc.imageUrl && (
                   <Image
                     width={300}
-                    height={200}
+                    height={500}
                     alt={svc.name}
                     src={svc.imageUrl}
                     className='w-full h-full object-cover transition-opacity'
@@ -77,18 +78,6 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
                     }}
                   />
                 )}
-              </div>
-
-              <div className='!px-6 !py-3'>
-                <h1 className='!text-xl !font-semibold text-light-red transition-colors'>
-                  {svc.name}
-                </h1>
-                <p className='!mt-2 text-gray-600 text-sm max-h-32 overflow-y-auto !pr-4'>
-                  {svc.description}
-                </p>
-                <p className='!mt-2 text-foreground text-lg font-medium absolute bottom-6'>
-                  ${svc.price.toFixed(2)}
-                </p>
               </div>
             </div>
           ))

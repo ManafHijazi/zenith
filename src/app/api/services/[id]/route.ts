@@ -19,7 +19,6 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const formData = await req.formData();
   const name = formData.get('name') as string;
   const price = parseFloat(formData.get('price') as string);
-  const description = formData.get('description') as string;
   const file = formData.get('image') as File | null;
 
   let imageUrl: string | undefined;
@@ -39,9 +38,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     imageUrl = data.publicUrl;
   }
 
-  const updatePayload: { name: string; description: string; price: number; imageUrl?: string } = {
+  const updatePayload: { name: string; price: number; imageUrl?: string } = {
     name,
-    description,
     price,
   };
   if (imageUrl) updatePayload.imageUrl = imageUrl;

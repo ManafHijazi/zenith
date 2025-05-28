@@ -9,24 +9,21 @@ type Service = {
   name: string;
   price: number;
   imageUrl: string;
-  description: string;
 };
 
 export default function AdminServices({ initial }: { initial: Service[] }) {
   const [list, setList] = useState(initial);
   const [form, setForm] = useState<{
     name: string;
-    description: string;
     price: string;
     file: File | null;
-  }>({ name: '', description: '', price: '', file: null });
+  }>({ name: '', price: '', file: null });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<{
     name: string;
-    description: string;
     price: string;
     file: File | null;
-  }>({ name: '', description: '', price: '', file: null });
+  }>({ name: '', price: '', file: null });
   const [confirmId, setConfirmId] = useState<number | null>(null);
   const [addLoading, setAddLoading] = useState(false);
   const [editLoadingId, setEditLoadingId] = useState<number | null>(null);
@@ -41,11 +38,10 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
     setAddLoading(true);
     const data = new FormData();
     data.append('name', form.name);
-    data.append('description', form.description);
     data.append('price', form.price);
     if (form.file) data.append('image', form.file);
     await fetch('/api/services', { method: 'POST', body: data });
-    setForm({ name: '', description: '', price: '', file: null });
+    setForm({ name: '', price: '', file: null });
     await refresh();
     setAddLoading(false);
   };
@@ -62,7 +58,6 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
     setEditingId(svc.id);
     setEditForm({
       name: svc.name,
-      description: svc.description,
       price: svc.price.toString(),
       file: null,
     });
@@ -72,7 +67,6 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
     setEditLoadingId(id);
     const data = new FormData();
     data.append('name', editForm.name);
-    data.append('description', editForm.description);
     data.append('price', editForm.price);
     if (editForm.file) data.append('image', editForm.file);
     await fetch(`/api/services/${id}`, { method: 'PUT', body: data });
@@ -117,18 +111,11 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
             />
           </div>
 
-          <textarea
-            placeholder='Description'
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className='!p-2 !rounded-lg w-full !bg-white focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
-          />
-
           <input
             type='file'
             accept='image/*'
             onChange={(e) => setForm({ ...form, file: e.target.files?.[0] || null })}
-            className='!p-2 !rounded-lg w-full !bg-white focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+            className='!p-2 !cursor-pointer !rounded-lg w-full !bg-white focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
           />
           <button
             onClick={add}
@@ -158,9 +145,6 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
               </th>
               <th className='!px-6 !py-3 !text-left !text-md !font-semibold text-white capitalize tracking-wider'>
                 Price
-              </th>
-              <th className='!px-6 !py-3 !text-left !text-md !font-semibold text-white capitalize tracking-wider'>
-                Description
               </th>
               <th className='!px-8 !py-3 !text-right !text-md !font-semibold text-white capitalize tracking-wider'>
                 Actions
@@ -207,10 +191,10 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                             alt={svc.name}
                             width={50}
                             height={50}
-                            className='object-cover rounded'
+                            className='object-cover !rounded'
                           />
                         ) : (
-                          <div className='w-12 h-12 bg-gray-100 rounded' />
+                          <div className='w-12 h-12 bg-gray-100 !rounded' />
                         )}
                         <input
                           type='file'
@@ -218,7 +202,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                           onChange={(e) =>
                             setEditForm({ ...editForm, file: e.target.files?.[0] || null })
                           }
-                          className='!border !p-2 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+                          className='!border !cursor-pointer !p-2 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
                         />
                       </div>
                     </td>
@@ -228,14 +212,6 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                         type='number'
                         value={editForm.price}
                         onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
-                        className='!border !p-2 !rounded-lg w-full focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
-                      />
-                    </td>
-                    <td className='!px-6 !py-4'>
-                      <textarea
-                        placeholder='Description'
-                        value={editForm.description || ''}
-                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                         className='!border !p-2 !rounded-lg w-full focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
                       />
                     </td>
@@ -280,9 +256,9 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                     )}
                   </td>
                   <td className='!px-6 !py-4 !whitespace-nowrap'>${svc.price.toFixed(2)}</td>
-                  <td className='!px-6 !py-4 !whitespace-nowrap !truncate max-w-32'>
+                  {/* <td className='!px-6 !py-4 !whitespace-nowrap !truncate max-w-32'>
                     {svc.description}
-                  </td>
+                  </td> */}
                   <td className='!px-6 !py-4 !text-right !space-x-2 !whitespace-nowrap !flex-nowrap'>
                     <button
                       onClick={() => startEdit(svc)}
