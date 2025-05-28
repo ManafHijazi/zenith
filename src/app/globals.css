@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 :root {
-  --background: #d1d1d1;
+  --background: #f1f1f1;
   --foreground: #454343;
   --light-red: #a47765;
 }
@@ -27,5 +27,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-raleway), serif;
 }
