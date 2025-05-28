@@ -35,13 +35,16 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
               (selected.has(svc.id) ? 'ring-4 ring-blue-500' : '')
             }
             onClick={() => toggle(svc.id)}>
-            <Image
-              src={svc.imageUrl}
-              alt={svc.name}
-              width={320}
-              height={128}
-              className='w-full h-32 object-cover rounded'
-            />
+            {svc.imageUrl && (
+              <Image
+                src={svc.imageUrl}
+                alt={svc.name}
+                width={320}
+                height={128}
+                className='w-full h-32 object-cover rounded'
+              />
+            )}
+
             <h3 className='mt-2 font-bold'>{svc.name}</h3>
             <p>${svc.price.toFixed(2)}</p>
           </div>

@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
   const { email, services } = await req.json();
   await transporter.sendMail({
-    from: process.env.SMTP_USER,
-    to: email,
+    from: email,
+    to: process.env.PUBLIC_EMAIL,
     subject: 'Your Selected Services',
     text: `You picked service IDs: ${services.join(', ')}`,
   });
