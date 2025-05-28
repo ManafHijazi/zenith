@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export async function GET(req: Request, context: any) {
+  const rawId = context.params.id;
+  const id = Number(rawId);
   const { data: service, error } = await supabaseAdmin
     .from('services')
     .select('*')
@@ -12,8 +14,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   return NextResponse.json(service);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export async function PUT(req: Request, context: any) {
+  const rawId = context.params.id;
+  const id = Number(rawId);
   const formData = await req.formData();
   const name = formData.get('name') as string;
   const price = parseFloat(formData.get('price') as string);
@@ -53,8 +56,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   return NextResponse.json(service);
 }
 
-export async function DELETE(req: Request, context: { params: { id: string } }) {
-  const { id: rawId } = await context.params;
+export async function DELETE(req: Request, context: any) {
+  const rawId = context.params.id;
   const id = Number(rawId);
 
   const { error } = await supabaseAdmin.from('services').delete().eq('id', id);
