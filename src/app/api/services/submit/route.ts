@@ -68,11 +68,8 @@ export async function POST(req: Request) {
   await mailjet.post('send', { version: 'v3.1' }).request({
     Messages: [
       {
-        From: {
-          Email: process.env.MAILJET_FROM_EMAIL!,
-          Name: process.env.MAILJET_FROM_NAME!,
-        },
-        To: [{ Email: 'manafmhijazi@gmail.com', Name: 'Manaf Hijazi' }],
+        From: { Email: process.env.MAILJET_FROM_EMAIL!, Name: process.env.MAILJET_FROM_NAME! },
+        To: [{ Email: process.env.MAILJET_TO_EMAIL!, Name: process.env.MAILJET_TO_EMAIL! }],
         Subject: 'New Zenith Services Request',
         HTMLPart: htmlBody,
       },

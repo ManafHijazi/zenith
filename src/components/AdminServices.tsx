@@ -280,7 +280,9 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                     )}
                   </td>
                   <td className='!px-6 !py-4 !whitespace-nowrap'>${svc.price.toFixed(2)}</td>
-                  <td className='!px-6 !py-4 !whitespace-nowrap'>{svc.description}</td>
+                  <td className='!px-6 !py-4 !whitespace-nowrap !truncate max-w-32'>
+                    {svc.description}
+                  </td>
                   <td className='!px-6 !py-4 !text-right !space-x-2 !whitespace-nowrap !flex-nowrap'>
                     <button
                       onClick={() => startEdit(svc)}

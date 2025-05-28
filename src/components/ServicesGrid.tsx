@@ -51,10 +51,10 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
             <div
               key={svc.id}
               onClick={() => toggle(svc.id)}
-              className={`group relative bg-white rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
+              className={`group relative max-h-[35rem] min-h-[35rem] bg-white rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
                 selected.has(svc.id) ? 'ring-4 ring-light-red' : ''
               }`}>
-              <div className='relative w-full h-80 mb-2 overflow-hidden rounded-md'>
+              <div className='relative w-full h-80 mb-2 overflow-hidden'>
                 {!loadedImages.has(svc.id) && (
                   <div className='absolute inset-0 bg-gray-200 animate-pulse' />
                 )}
@@ -80,11 +80,15 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
               </div>
 
               <div className='!px-6 !py-3'>
-                <h1 className='!text-xl !font-semibold text-foreground group-hover:text-light-red transition-colors'>
+                <h1 className='!text-xl !font-semibold text-light-red transition-colors'>
                   {svc.name}
                 </h1>
-                <p className='!mt-1 text-gray-600 text-sm'>{svc.description}</p>
-                <p className='!mt-2 text-foreground text-lg font-medium'>${svc.price.toFixed(2)}</p>
+                <p className='!mt-2 text-gray-600 text-sm max-h-32 overflow-y-auto !pr-4'>
+                  {svc.description}
+                </p>
+                <p className='!mt-2 text-foreground text-lg font-medium absolute bottom-6'>
+                  ${svc.price.toFixed(2)}
+                </p>
               </div>
             </div>
           ))
