@@ -99,7 +99,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
       </div>
 
       {/* Add Form */}
-      <div className='!space-y-4 !mb-8 !w-[50%]'>
+      <div className='!space-y-4 !mb-8 lg:!w-[50%]'>
         <div className='flex flex-col gap-y-4'>
           <div className='flex !gap-x-2'>
             <input
@@ -146,7 +146,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
       </div>
 
       {/* Table */}
-      <div className='overflow-hidden rounded-lg w-full'>
+      <div className='overflow-auto rounded-lg w-full'>
         <table className='min-w-full !divide-y !divide-gray-200 w-full'>
           <thead className='bg-light-red w-full'>
             <tr>
@@ -247,7 +247,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                           editLoadingId === svc.id ? 'opacity-50' : ''
                         }`}>
                         {editLoadingId === svc.id ? (
-                          <span className='inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                          <span className='inline-block w-5 h-5 !border-2 !border-white !border-t-transparent !rounded-full animate-spin' />
                         ) : (
                           'Save'
                         )}
@@ -281,7 +281,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                   </td>
                   <td className='!px-6 !py-4 !whitespace-nowrap'>${svc.price.toFixed(2)}</td>
                   <td className='!px-6 !py-4 !whitespace-nowrap'>{svc.description}</td>
-                  <td className='!px-6 !py-4 !text-right !space-x-2'>
+                  <td className='!px-6 !py-4 !text-right !space-x-2 !whitespace-nowrap !flex-nowrap'>
                     <button
                       onClick={() => startEdit(svc)}
                       className='inline-flex !cursor-pointer !p-2 !bg-yellow-500 !text-white !rounded'>

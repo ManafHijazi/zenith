@@ -11,6 +11,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [submitted, setSubmitted] = useState(false);
 
   const toggle = (id: number) => {
     const s = new Set(selected);
@@ -27,6 +28,9 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, services: Array.from(selected) }),
     });
+    setSubmitted(true);
+    setEmail('');
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   return (
@@ -90,26 +94,31 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
       </div>
 
       {services && services.length > 0 && (
-        <div className='!mt-8 flex !space-x-4'>
-          <input
-            type='email'
-            value={email}
-            placeholder='Your email'
-            className='!bg-white w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
-            onChange={(event) => {
-              const { value } = event?.target;
+        <>
+          <div className='!mt-8 flex !space-x-4'>
+            <input
+              type='email'
+              value={email}
+              placeholder='Your email'
+              className='!bg-white w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+              onChange={(event) => {
+                const { value } = event?.target;
 
-              setEmail(value);
-            }}
-          />
+                setEmail(value);
+              }}
+            />
 
-          <button
-            onClick={submit}
-            disabled={!emailRegex.test(email)}
-            className='w-42 disabled:cursor-not-allowed !disabled:bg-gray-200 !py-3 disabled:translate-y-0 !bg-light-red !hover:bg-red-600 !text-white cursor-pointer !text-lg !rounded-lg shadow transition transform hover:-translate-y-0.5'>
-            Submit
-          </button>
-        </div>
+            <button
+              onClick={submit}
+              disabled={!emailRegex.test(email)}
+              className='w-42 disabled:cursor-not-allowed !disabled:bg-gray-200 !py-3 disabled:translate-y-0 !bg-light-red !hover:bg-red-600 !text-white cursor-pointer !text-lg !rounded-lg shadow transition transform hover:-translate-y-0.5'>
+              Submit
+            </button>
+          </div>
+          {submitted && (
+            <p className='!mt-2 !text-green-700'>Thank you! Your request has been submitted.</p>
+          )}{' '}
+        </>
       )}
     </div>
   );
