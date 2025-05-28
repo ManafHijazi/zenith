@@ -1,10 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 
 export async function GET() {
-  const services = await prisma.service.findMany();
+  const { data: services, error } = await supabaseAdmin.from('services').select('*');
+  if (error) throw error;
   return NextResponse.json(services);
 }
 
@@ -22,22 +21,31 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const ext = file.name.split('.').pop() || 'jpg';
     const filename = `${Date.now()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-
-    await fs.mkdir(uploadDir, { recursive: true });
-    await fs.writeFile(path.join(uploadDir, filename), buffer);
-    imageUrl = `/uploads/${filename}`;
+    const { error: upErr } = await supabaseAdmin.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .upload(filename, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+    if (upErr) throw upErr;
+    const { data } = supabaseAdmin.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .getPublicUrl(filename);
+    imageUrl = data.publicUrl;
   }
 
-  // Create the record
-  const service = await prisma.service.create({
-    data: {
-      name,
-      description,
-      price: parseFloat(priceStr),
-      imageUrl,
-    },
-  });
-
+  // Create the record via Supabase
+  const { data: service, error: insertErr } = await supabaseAdmin
+    .from('services')
+    .insert([
+      {
+        name,
+        description,
+        price: parseFloat(priceStr),
+        imageUrl,
+      },
+    ])
+    .single();
+  if (insertErr) throw insertErr;
   return NextResponse.json(service);
 }

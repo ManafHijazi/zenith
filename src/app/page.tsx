@@ -1,8 +1,11 @@
-import prisma from '@/lib/prisma';
+import { supabaseAdmin } from '@/lib/supabase';
 import ServicesGrid from '@/components/ServicesGrid';
 
 export default async function Home() {
-  const services = await prisma.service.findMany();
+  const { data: services, error } = await supabaseAdmin.from('services').select('*');
+  if (error) {
+    throw error;
+  }
 
-  return <ServicesGrid services={services} />;
+  return <ServicesGrid services={services ?? []} />;
 }

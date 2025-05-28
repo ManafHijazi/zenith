@@ -1,57 +1,63 @@
-import fs from 'fs/promises';
-import path from 'path';
+import { supabaseAdmin } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const service = await prisma.service.findUnique({
-    where: { id: Number(params.id) },
-  });
+  const id = Number(params.id);
+  const { data: service, error } = await supabaseAdmin
+    .from('services')
+    .select('*')
+    .eq('id', id)
+    .single();
+  if (error) throw error;
   return NextResponse.json(service);
 }
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  // Await dynamic params
-  const { id } = await params;
-
-  // Parse multipart form
+  const id = Number(params.id);
   const formData = await req.formData();
   const name = formData.get('name') as string;
-  const priceStr = formData.get('price') as string;
+  const price = parseFloat(formData.get('price') as string);
   const description = formData.get('description') as string;
   const file = formData.get('image') as File | null;
 
-  // Handle file upload if provided
   let imageUrl: string | undefined;
   if (file && file instanceof File) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const ext = file.name.split('.').pop() || 'jpg';
     const filename = `${Date.now()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    await fs.mkdir(uploadDir, { recursive: true });
-    await fs.writeFile(path.join(uploadDir, filename), buffer);
-    imageUrl = `/uploads/${filename}`;
+    const { error: upErr } = await supabaseAdmin.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .upload(filename, buffer, {
+        contentType: file.type,
+      });
+    if (upErr) throw upErr;
+    const { data } = supabaseAdmin.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .getPublicUrl(filename);
+    imageUrl = data.publicUrl;
   }
 
-  // Build update data
-  const updateData: { name: string; description: string; price: number; imageUrl?: string } = {
+  const updatePayload: { name: string; description: string; price: number; imageUrl?: string } = {
     name,
     description,
-    price: parseFloat(priceStr),
+    price,
   };
-  if (imageUrl) updateData.imageUrl = imageUrl;
+  if (imageUrl) updatePayload.imageUrl = imageUrl;
 
-  // Perform update
-  const service = await prisma.service.update({
-    where: { id: Number(id) },
-    data: updateData,
-  });
+  const { data: service, error } = await supabaseAdmin
+    .from('services')
+    .update(updatePayload)
+    .eq('id', id)
+    .single();
+  if (error) throw error;
   return NextResponse.json(service);
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  await prisma.service.delete({
-    where: { id: Number(params.id) },
-  });
+export async function DELETE(req: Request, context: { params: { id: string } }) {
+  const { id: rawId } = await context.params;
+  const id = Number(rawId);
+
+  const { error } = await supabaseAdmin.from('services').delete().eq('id', id);
+  if (error) throw error;
   return NextResponse.json({ ok: true });
 }

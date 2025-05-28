@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { supabaseAdmin } from '@/lib/supabase';
 import { mailjet } from '@/lib/mailjet';
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   // 1. Parse payload
   const { email: userEmail, services: serviceIds } = await req.json();
 
   // 2. Fetch service details
-  const services = await prisma.service.findMany({
-    where: { id: { in: serviceIds.map(Number) } },
-  });
+  const { data: services, error } = await supabaseAdmin
+    .from('services')
+    .select('id, name, description, price, imageUrl')
+    .in('id', serviceIds.map(Number));
+  if (error) throw error;
 
   // 3. Build full HTML email with logo and styled table
   const htmlBody = `

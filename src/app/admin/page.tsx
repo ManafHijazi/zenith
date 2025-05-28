@@ -1,8 +1,10 @@
-import prisma from '@/lib/prisma';
+import { supabaseAdmin } from '@/lib/supabase';
 import AdminServices from '@/components/AdminServices';
 
 export default async function AdminPage() {
-  const services = await prisma.service.findMany();
-
-  return <AdminServices initial={services} />;
+  const { data: services, error } = await supabaseAdmin.from('services').select('*');
+  if (error) {
+    throw error;
+  }
+  return <AdminServices initial={services ?? []} />;
 }
