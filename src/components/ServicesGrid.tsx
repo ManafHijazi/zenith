@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
-type Service = { id: number; name: string; price: number; imageUrl: string };
+type Service = { id: number; name: string; description: string; price: number; imageUrl: string };
 
 export default function ServicesGrid({ services }: { services: Service[] }) {
   const [email, setEmail] = useState('');
@@ -30,7 +31,9 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
   return (
     <div className='w-full !pb-12 max-w-7xl mx-auto !px-6 flex flex-col gap-y-6'>
       <div className='flex flex-col items-center gap-y-6'>
-        <Image src='/dark-logo.png' alt='Logo' width={300} height={300} />
+        <Link href='/' className='inline-block !cursor-pointer'>
+          <Image src='/dark-logo.png' alt='Logo' width={300} height={300} />
+        </Link>
         <h1 className='!text-4xl'>Our Services</h1>
         <div className='w-full md:!px-80 !my-6'>
           <div className='w-full bg-foreground h-0.5 opacity-20 rounded-4xl' />
@@ -75,7 +78,8 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
                 <h1 className='!text-xl !font-semibold text-foreground group-hover:text-light-red transition-colors'>
                   {svc.name}
                 </h1>
-                <p className='mt-1 text-foreground text-lg font-medium'>${svc.price.toFixed(2)}</p>
+                <p className='!mt-1 text-gray-600 text-sm'>{svc.description}</p>
+                <p className='!mt-2 text-foreground text-lg font-medium'>${svc.price.toFixed(2)}</p>
               </div>
             </div>
           ))
@@ -90,7 +94,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
             type='email'
             value={email}
             placeholder='Your email'
-            className='!bg-white border w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+            className='!bg-white w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
             onChange={(event) => {
               const { value } = event?.target;
 
