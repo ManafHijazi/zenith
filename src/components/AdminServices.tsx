@@ -1,15 +1,15 @@
 'use client';
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 type Service = {
   id: number;
   name: string;
-  description: string;
   price: number;
   imageUrl: string;
+  description: string;
 };
 
 export default function AdminServices({ initial }: { initial: Service[] }) {
