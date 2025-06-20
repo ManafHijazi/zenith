@@ -54,7 +54,9 @@ export async function POST(req: Request) {
                         <p style="margin: 0 0 5px; color: #666; font-size: 14px;">${
                           s.description
                         }</p>
-                        <p style="margin: 0; font-weight: bold;">$${s.price.toFixed(2)}</p>
+                        <p style="margin: 0; font-weight: bold;">$${
+                          (s?.price && s?.price?.toFixed(2)) || 0
+                        }</p>
                       </td>
                     </tr>`
                     )

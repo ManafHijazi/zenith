@@ -255,7 +255,9 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                       <div className='w-12 h-12 bg-gray-100 rounded' />
                     )}
                   </td>
-                  <td className='!px-6 !py-4 !whitespace-nowrap'>${svc.price.toFixed(2)}</td>
+                  <td className='!px-6 !py-4 !whitespace-nowrap'>
+                    ${(svc?.price && svc?.price?.toFixed(2)) || 0}
+                  </td>
                   {/* <td className='!px-6 !py-4 !whitespace-nowrap !truncate max-w-32'>
                     {svc.description}
                   </td> */}
