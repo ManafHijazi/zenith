@@ -45,7 +45,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
         </div>
       </div>
 
-      <div className='flex overflow-x-auto overflow-y-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-x-visible md:overflow-y-auto !space-x-8 !space-y-8 md:space-x-0 !p-8 !mt-6'>
+      <div className='flex overflow-x-auto max-h-[calc(100vh-20rem)] overflow-y-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-x-visible md:overflow-y-auto !space-x-8 !space-y-8 md:space-x-0 !p-8 !mt-6'>
         {services && services.length > 0 ? (
           services.map((svc) => (
             <div
