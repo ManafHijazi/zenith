@@ -45,38 +45,43 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
         </div>
       </div>
 
-      <div className='grid overflow-y-auto max-h-[calc(100vh-20rem)] !p-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-6'>
+      <div className='flex overflow-x-auto overflow-y-hidden md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-x-visible md:overflow-y-auto !space-x-8 !space-y-8 md:space-x-0 !p-8 !mt-6'>
         {services && services.length > 0 ? (
           services.map((svc) => (
             <div
               key={svc.id}
               onClick={() => toggle(svc.id)}
-              className={`group relative max-h-[30rem] min-h-[30rem] bg-white rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
+              className={`group relative flex-shrink-0 max-h-[17rem] min-h-[17rem] rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
                 selected.has(svc.id) ? 'ring-4 ring-light-red' : ''
               }`}>
-              <h1 className='!text-2xl text-center !mt-12 !mb-9 text-foreground'>{svc.name}</h1>
-              <div className='relative w-full h-80 overflow-hidden'>
+              <h1 className='!text-2xl text-center !mt-12 !mb-9 text-foreground text-nowrap'>
+                {svc.name}
+              </h1>
+
+              <div className='relative w-full overflow-hidden flex items-center justify-center'>
                 {!loadedImages.has(svc.id) && (
                   <div className='absolute inset-0 bg-gray-200 animate-pulse' />
                 )}
 
                 {svc.imageUrl && (
-                  <Image
-                    width={300}
-                    height={500}
-                    alt={svc.name}
-                    src={svc.imageUrl}
-                    className='w-full h-full object-cover transition-opacity'
-                    onLoadingComplete={() => {
-                      setLoadedImages((prev) => {
-                        const next = new Set(prev);
+                  <div className='w-1/3 h-1/3'>
+                    <Image
+                      width={300}
+                      height={500}
+                      alt={svc.name}
+                      src={svc.imageUrl}
+                      className='w-full h-full object-cover transition-opacity'
+                      onLoadingComplete={() => {
+                        setLoadedImages((prev) => {
+                          const next = new Set(prev);
 
-                        next.add(svc.id);
+                          next.add(svc.id);
 
-                        return next;
-                      });
-                    }}
-                  />
+                          return next;
+                        });
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
