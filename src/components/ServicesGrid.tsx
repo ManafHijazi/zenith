@@ -51,10 +51,10 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
             <div
               key={svc.id}
               onClick={() => toggle(svc.id)}
-              className={`group relative flex-shrink-0 max-h-[17rem] min-h-[17rem] rounded-xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
+              className={`group relative flex-shrink-0 max-h-[17rem] min-h-[17rem] rounded-2xl overflow-hidden cursor-pointer transform transition ease-out hover:shadow-2xl hover:-translate-y-1 ${
                 selected.has(svc.id) ? 'ring-4 ring-light-red' : ''
               }`}>
-              <h1 className='!text-2xl text-center !mt-12 !mb-9 text-foreground text-nowrap'>
+              <h1 className='!text-2xl text-center !mt-10 !mb-9 text-foreground text-nowrap'>
                 {svc.name}
               </h1>
 
