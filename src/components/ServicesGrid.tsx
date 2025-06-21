@@ -84,6 +84,15 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
                   </div>
                 )}
               </div>
+
+              <div
+                className={`!text-xl absolute opacity-0 transition-opacity bottom-4 right-4 font-semibold text-green-700 text-nowrap ${
+                  selected.has(svc.id) ? 'opacity-100' : ''
+                }`}>
+                {svc?.price || svc.price === 0
+                  ? svc?.price?.toLocaleString('en-US', { style: 'currency', currency: 'JOD' })
+                  : 'Free'}
+              </div>
             </div>
           ))
         ) : (
@@ -115,7 +124,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
           </div>
           {submitted && (
             <p className='!mt-2 !text-green-700'>Thank you! Your request has been submitted.</p>
-          )}{' '}
+          )}
         </>
       )}
     </div>

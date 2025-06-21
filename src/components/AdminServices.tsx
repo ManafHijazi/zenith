@@ -58,7 +58,7 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
     setEditingId(svc.id);
     setEditForm({
       name: svc.name,
-      price: svc.price.toString(),
+      price: svc?.price?.toString() || '',
       file: null,
     });
   };
@@ -255,12 +255,11 @@ export default function AdminServices({ initial }: { initial: Service[] }) {
                       <div className='w-12 h-12 bg-gray-100 rounded' />
                     )}
                   </td>
-                  <td className='!px-6 !py-4 !whitespace-nowrap'>
-                    ${(svc?.price && svc?.price?.toFixed(2)) || 0}
+                  <td className='!px-6 !py-4 !whitespace-nowrap text-green-700 font-semibold'>
+                    {svc?.price || svc?.price === 0
+                      ? svc?.price?.toLocaleString('en-US', { style: 'currency', currency: 'JOD' })
+                      : 'Free'}
                   </td>
-                  {/* <td className='!px-6 !py-4 !whitespace-nowrap !truncate max-w-32'>
-                    {svc.description}
-                  </td> */}
                   <td className='!px-6 !py-4 !text-right !space-x-2 !whitespace-nowrap !flex-nowrap'>
                     <button
                       onClick={() => startEdit(svc)}
