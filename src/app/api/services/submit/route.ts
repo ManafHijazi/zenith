@@ -4,7 +4,7 @@ import { mailjet } from '@/lib/mailjet';
 
 export async function POST(req: Request) {
   // 1. Parse payload
-  const { email: userEmail, services: serviceIds } = await req.json();
+  const { name, fileNumber, services: serviceIds } = await req.json();
 
   // 2. Fetch service details
   const { data: services, error } = await supabaseAdmin
@@ -29,7 +29,8 @@ export async function POST(req: Request) {
             <tr>
               <td style="padding: 20px;">
                 <h2 style="margin: 0 0 10px;">New Services Request</h2>
-                <p><strong>Requested by:</strong> ${userEmail}</p>
+                <p><strong>Requested by:</strong> ${name}</p>
+                <p><strong>File Number:</strong> ${fileNumber}</p>
               </td>
             </tr>
             <tr>
@@ -51,9 +52,6 @@ export async function POST(req: Request) {
                       </td>
                       <td style="padding: 10px; border-bottom: 1px solid #eee; vertical-align: top;">
                         <h3 style="margin: 0 0 5px;">${s.name}</h3>
-                        <p style="margin: 0 0 5px; color: #666; font-size: 14px;">${
-                          s.description
-                        }</p>
                         <p style="margin: 0; font-weight: bold;">$${
                           (s?.price && s?.price?.toFixed(2)) || 0
                         }</p>

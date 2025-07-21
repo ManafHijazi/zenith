@@ -6,12 +6,11 @@ import Link from 'next/link';
 type Service = { id: number; name: string; description: string; price: number; imageUrl: string };
 
 export default function ServicesGrid({ services }: { services: Service[] }) {
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [fileNumber, setFileNumber] = useState('');
+  const [submitted, setSubmitted] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const [submitted, setSubmitted] = useState(false);
 
   const toggle = (id: number) => {
     const s = new Set(selected);
@@ -26,10 +25,11 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
     await fetch('/api/services/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, services: Array.from(selected) }),
+      body: JSON.stringify({ name, fileNumber, services: Array.from(selected) }),
     });
     setSubmitted(true);
-    setEmail('');
+    setName('');
+    setFileNumber('');
     setTimeout(() => setSubmitted(false), 5000);
   };
 
@@ -39,7 +39,7 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
         <Link href='/' className='inline-block !cursor-pointer'>
           <Image src='/dark-logo.png' alt='Logo' width={300} height={300} />
         </Link>
-        <h1 className='!text-4xl'>Our Services</h1>
+        <h1 className='!text-4xl'>Comfort Menu</h1>
         <div className='w-full md:!px-80 !my-6'>
           <div className='w-full bg-foreground h-0.5 opacity-20 rounded-4xl' />
         </div>
@@ -104,20 +104,31 @@ export default function ServicesGrid({ services }: { services: Service[] }) {
         <>
           <div className='!mt-8 flex !space-x-4'>
             <input
-              type='email'
-              value={email}
-              placeholder='Your email'
+              type='text'
+              value={name}
+              placeholder='Name'
               className='!bg-white w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
               onChange={(event) => {
                 const { value } = event?.target;
 
-                setEmail(value);
+                setName(value);
+              }}
+            />
+            <input
+              type='text'
+              value={fileNumber}
+              placeholder='File Number'
+              className='!bg-white w-full !border-gray-300 !p-3 !rounded-lg focus:outline-none focus:border-light-red focus:ring-2 focus:ring-light-red transition'
+              onChange={(event) => {
+                const { value } = event?.target;
+
+                setFileNumber(value);
               }}
             />
 
             <button
               onClick={submit}
-              disabled={!emailRegex.test(email)}
+              disabled={!name || !fileNumber}
               className='w-42 disabled:cursor-not-allowed !disabled:bg-gray-200 !py-3 disabled:translate-y-0 !bg-light-red !hover:bg-red-600 !text-white cursor-pointer !text-lg !rounded-lg shadow transition transform hover:-translate-y-0.5'>
               Submit
             </button>
