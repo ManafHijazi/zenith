@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const raleway = Raleway({
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang='en'>
       <body className={`${raleway.variable} antialiased`}>
+        <Analytics />
         <div className='w-full flex justify-center overflow-hidden'>{children}</div>
       </body>
     </html>
