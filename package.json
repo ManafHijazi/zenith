@@ -17,7 +17,7 @@
     "next": "15.3.2",
     "next-auth": "^4.24.11",
     "node-mailjet": "^6.0.8",
-    "nodemailer": "^7.0.3",
+    "nodemailer": "^7.0.7",
     "prisma": "^6.8.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
