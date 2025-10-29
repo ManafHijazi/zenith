@@ -15,7 +15,7 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "next": "15.3.2",
-    "next-auth": "^4.24.11",
+    "next-auth": "^4.24.12",
     "node-mailjet": "^6.0.8",
     "nodemailer": "^7.0.3",
     "prisma": "^6.8.2",
